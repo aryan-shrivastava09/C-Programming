@@ -27,8 +27,8 @@ rectangle canonicalize(rectangle r) {
   if(r.height<0)
     {r.y=r.y+r.height;
       r.height=-r.height;}
-  return r;
-}
+  return r;}
+
 rectangle intersection(rectangle r1, rectangle r2) {
   rectangle r,ra,rb,rp,rq;
   ra=canonicalize(r1);
@@ -42,10 +42,20 @@ rectangle intersection(rectangle r1, rectangle r2) {
     rq=ra;
   else
     rq=rb;
-  r.x=max(ra.x,rb.x);
-  r.y=max(ra.y,rb.y);
-  r.width=rp.x+rp.width-r.x;
-  r.height=rq.y+rq.height-r.y;
+  if(((ra.x>=rb.x&&ra.x<=(rb.x+rb.width))&&((rb.y>=ra.y&&rb.y<=(ra.y+ra.height))||(ra.y>=rb.y&&ra.y<=(rb.y+rb.height))))||((rb.x>=ra.x&&rb.x<=(ra.x+ra.width))&&((ra.y>=rb.y&&ra.y<=(rb.y+rb.height))||(rb.y>=ra.y&&rb.y<=(ra.y+ra.height)))))
+    { r.x=max(ra.x,rb.x);
+      r.y=max(ra.y,rb.y);
+      if(((ra.x>=rb.x&&(ra.x+ra.width)<=(rb.x+rb.width))||(rb.x>=ra.x&&(rb.x+rb.width)<=(ra.x+ra.width)))&&((ra.y>=rb.y&&(ra.y+ra.height)<=(rb.y+rb.height))||(rb.y>=ra.y&&(rb.y+rb.height)<=(ra.height+ra.y))))
+	{r.width=min(ra.width,rb.width);
+	  r.height=min(ra.height,rb.height);}
+      else
+	{r.width=rp.x+rp.width-r.x;
+	  r.height=rq.y+rq.height-r.y;}}
+  else{r.x=0;
+    r.y=0;
+    r.width=0;
+    r.height=0;
+  }
   return r;
 }
 
